@@ -31,13 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAutoridadeVotacao));
             label1 = new Label();
             lblStatus = new Label();
-            groupBox1 = new GroupBox();
-            txtCredencial = new TextBox();
-            lstCandidatos = new ListBox();
-            btnVotar = new Button();
-            btnCarregarCandidatos = new Button();
-            label5 = new Label();
-            label3 = new Label();
             label2 = new Label();
             label8 = new Label();
             label9 = new Label();
@@ -45,7 +38,7 @@
             gridResultados = new DataGridView();
             btnVerResultados = new Button();
             label4 = new Label();
-            groupBox1.SuspendLayout();
+            label3 = new Label();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridResultados).BeginInit();
             SuspendLayout();
@@ -53,7 +46,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(37, 559);
+            label1.Location = new Point(44, 401);
             label1.Name = "label1";
             label1.Size = new Size(39, 15);
             label1.TabIndex = 0;
@@ -62,84 +55,16 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(82, 559);
+            lblStatus.Location = new Point(89, 401);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(43, 15);
             lblStatus.TabIndex = 1;
             lblStatus.Text = "Pronto";
             // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(txtCredencial);
-            groupBox1.Controls.Add(lstCandidatos);
-            groupBox1.Controls.Add(btnVotar);
-            groupBox1.Controls.Add(btnCarregarCandidatos);
-            groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(label3);
-            groupBox1.Location = new Point(15, 15);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(601, 239);
-            groupBox1.TabIndex = 11;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Credencial e Voto";
-            // 
-            // txtCredencial
-            // 
-            txtCredencial.Location = new Point(309, 105);
-            txtCredencial.Name = "txtCredencial";
-            txtCredencial.Size = new Size(175, 23);
-            txtCredencial.TabIndex = 16;
-            // 
-            // lstCandidatos
-            // 
-            lstCandidatos.FormattingEnabled = true;
-            lstCandidatos.Location = new Point(22, 105);
-            lstCandidatos.Name = "lstCandidatos";
-            lstCandidatos.Size = new Size(247, 94);
-            lstCandidatos.TabIndex = 15;
-            // 
-            // btnVotar
-            // 
-            btnVotar.Location = new Point(309, 163);
-            btnVotar.Name = "btnVotar";
-            btnVotar.Size = new Size(175, 36);
-            btnVotar.TabIndex = 14;
-            btnVotar.Text = "Votar";
-            btnVotar.UseVisualStyleBackColor = true;
-            btnVotar.Click += btnVotar_Click;
-            // 
-            // btnCarregarCandidatos
-            // 
-            btnCarregarCandidatos.Location = new Point(22, 24);
-            btnCarregarCandidatos.Name = "btnCarregarCandidatos";
-            btnCarregarCandidatos.Size = new Size(175, 36);
-            btnCarregarCandidatos.TabIndex = 13;
-            btnCarregarCandidatos.Text = "Carregar Candidatos";
-            btnCarregarCandidatos.UseVisualStyleBackColor = true;
-            btnCarregarCandidatos.Click += btnCarregarCandidatos_Click;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(22, 82);
-            label5.Name = "label5";
-            label5.Size = new Size(110, 15);
-            label5.TabIndex = 12;
-            label5.Text = "Lista de Candidatos";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(309, 82);
-            label3.Name = "label3";
-            label3.Size = new Size(66, 15);
-            label3.TabIndex = 11;
-            label3.Text = "Credencial:";
-            // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(37, 559);
+            label2.Location = new Point(44, 401);
             label2.Name = "label2";
             label2.Size = new Size(39, 15);
             label2.TabIndex = 0;
@@ -168,9 +93,9 @@
             groupBox3.Controls.Add(gridResultados);
             groupBox3.Controls.Add(btnVerResultados);
             groupBox3.Controls.Add(label4);
-            groupBox3.Location = new Point(15, 260);
+            groupBox3.Location = new Point(22, 37);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(601, 296);
+            groupBox3.Size = new Size(601, 345);
             groupBox3.TabIndex = 12;
             groupBox3.TabStop = false;
             groupBox3.Text = "Resultados";
@@ -178,9 +103,9 @@
             // gridResultados
             // 
             gridResultados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridResultados.Location = new Point(22, 116);
+            gridResultados.Location = new Point(6, 116);
             gridResultados.Name = "gridResultados";
-            gridResultados.Size = new Size(557, 152);
+            gridResultados.Size = new Size(589, 199);
             gridResultados.TabIndex = 15;
             // 
             // btnVerResultados
@@ -202,13 +127,24 @@
             label4.TabIndex = 11;
             label4.Text = "Resultados";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            label3.ForeColor = Color.Green;
+            label3.Location = new Point(244, 13);
+            label3.Name = "label3";
+            label3.Size = new Size(160, 21);
+            label3.TabIndex = 13;
+            label3.Text = "Apuração dos votos";
+            // 
             // FrmAutoridadeVotacao
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(663, 590);
+            ClientSize = new Size(663, 433);
+            Controls.Add(label3);
             Controls.Add(groupBox3);
-            Controls.Add(groupBox1);
             Controls.Add(label2);
             Controls.Add(lblStatus);
             Controls.Add(label1);
@@ -216,8 +152,6 @@
             Name = "FrmAutoridadeVotacao";
             Text = "Autoridade Votação";
             Load += FrmAutoridadeVotacao_Load;
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)gridResultados).EndInit();
@@ -229,13 +163,6 @@
 
         private Label label1;
         private Label lblStatus;
-        private GroupBox groupBox1;
-        private TextBox txtCredencial;
-        private ListBox lstCandidatos;
-        private Button btnVotar;
-        private Button btnCarregarCandidatos;
-        private Label label5;
-        private Label label3;
         private Label label2;
         private Label label8;
         private Label label9;
@@ -243,5 +170,6 @@
         private DataGridView gridResultados;
         private Button btnVerResultados;
         private Label label4;
+        private Label label3;
     }
 }
