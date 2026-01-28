@@ -1,6 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using Grpc.Core;
+using System;
+using System.Collections.Concurrent;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Grpc.Core;
 using VotingSystem;
 
 public class VoterRegistrationServiceImpl : VoterRegistrationService.VoterRegistrationServiceBase
@@ -13,35 +15,67 @@ public class VoterRegistrationServiceImpl : VoterRegistrationService.VoterRegist
         "CRED-GHI-789"
     };
 
+    // Registo de quem já votou / já recebeu credencial (em memória)
+    // Guardamos a data-hora em UTC
+    private static readonly ConcurrentDictionary<string, DateTime> _issued =
+        new ConcurrentDictionary<string, DateTime>();
+
     public override Task<VoterResponse> IssueVotingCredential(
         VoterRequest request,
         ServerCallContext context)
     {
+        // 1) Validar input
+        var cc = request?.CitizenCardNumber?.Trim();
+
+        if (string.IsNullOrWhiteSpace(cc))
+        {
+            return Task.FromResult(new VoterResponse
+            {
+                IsEligible = false,
+                VotingCredential = ""
+            });
+        }
+
+        // 2) Se já votou, rejeita imediatamente
+        if (_issued.ContainsKey(cc))
+        {
+            Console.WriteLine($">> Rejeitado: {cc} já votou.");
+            return Task.FromResult(new VoterResponse
+            {
+                IsEligible = false,
+                VotingCredential = ""   // (opcional) poderia ser "ALREADY_VOTED"
+            });
+        }
+
+        // 3) Emitir credencial (70% válida / 30% inválida)
         string credential;
 
-        // Gerar número aleatório entre 0 e 1
         double p = RandomNumberGenerator.GetInt32(0, 100) / 100.0;
 
         if (p < 0.30)
         {
-            // 30% das vezes → enviar credencial inválida
+            // 30% → credencial inválida (teste)
             credential = GenerateInvalidCredential();
             Console.WriteLine(">> Enviada credencial **inválida** para teste.");
+
+            // NOTA: não marca como votou quando a credencial é inválida
         }
         else
         {
-            // 70% das vezes → credencial válida
+            // 70% → credencial válida
             credential = PickValidCredential();
             Console.WriteLine(">> Enviada credencial válida.");
+
+            // 4) Marca como já votou APENAS quando emite credencial válida
+            _issued.TryAdd(cc, DateTime.UtcNow);
         }
 
-        var response = new VoterResponse
+        // 5) Resposta
+        return Task.FromResult(new VoterResponse
         {
             IsEligible = true,
             VotingCredential = credential
-        };
-
-        return Task.FromResult(response);
+        });
     }
 
     private static string PickValidCredential()
