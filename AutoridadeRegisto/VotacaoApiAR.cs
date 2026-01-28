@@ -1,36 +1,38 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
 using Grpc.Net.Client;
 using VotingSystem.Voting;
 
-
 namespace AutoridadeRegisto
 {
+    internal static class VotacaoApiAR
+    {
+        // Endpoint remoto gRPC
+        private const string GrpcEndpoint = "https://ken01.utad.pt:9091";
 
-        internal class VotacaoApiAR
+        private static readonly VotingService.VotingServiceClient _client;
+
+        static VotacaoApiAR()
         {
-            private static readonly VotingService.VotingServiceClient _client;
-
-            static VotacaoApiAR()
+            // Handler para aceitar certificados não confiáveis (APENAS para testes)
+            var handler = new HttpClientHandler
             {
-                var handler = new HttpClientHandler
+                ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            // Criação do canal gRPC
+            var channel = GrpcChannel.ForAddress(
+                GrpcEndpoint,
+                new GrpcChannelOptions
                 {
-                    ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
+                    HttpHandler = handler
+                });
 
-                var channel = GrpcChannel.ForAddress(
-                         "https://localhost:9091",// "https://ken01.uatd.pt:9091",//
-                    new GrpcChannelOptions { HttpHandler = handler });
-
-                _client = new VotingService.VotingServiceClient(channel);
-            }
-
-            public static VotingService.VotingServiceClient Client => _client;
+            // Cliente gRPC gerado a partir do proto
+            _client = new VotingService.VotingServiceClient(channel);
         }
 
+        public static VotingService.VotingServiceClient Client => _client;
+    }
 }

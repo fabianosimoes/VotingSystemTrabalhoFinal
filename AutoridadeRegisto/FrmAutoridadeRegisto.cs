@@ -50,14 +50,15 @@ namespace AutoridadeRegisto
                 // 1) Se o servidor diz que não é elegível, aqui entra “já votou” (ou outro motivo)
                 if (!response.IsEligible)
                 {
+                    Invalido();
                     MessageBox.Show(
-                        "Este número do Cartão de Cidadão já consta como tendo realizado a votação (ou não é elegível). " +
-                        "\nPor favor, verifique se o número foi digitado corretamente.",
+                        "Este número do Cartão de Cidadão já consta como tendo realizado a votação. " +
+                        "Por favor, verifique se o número foi digitado corretamente.",
                         "Autoridade de Registo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
-                    Invalido();
+
                     return;
                 }
 
