@@ -41,12 +41,18 @@
             btnVotar = new Button();
             lstCandidatos = new ListBox();
             grpResultado = new GroupBox();
+            picP = new PictureBox();
+            picV = new PictureBox();
+            picS = new PictureBox();
             lblMensagemInstr = new Label();
             lblMsgConfirmacao = new Label();
             lblCandSelecionado = new Label();
             label6 = new Label();
             grpDadosEleitor.SuspendLayout();
             grpResultado.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picP).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picV).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picS).BeginInit();
             SuspendLayout();
             // 
             // grpDadosEleitor
@@ -131,16 +137,17 @@
             // label5
             // 
             label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label5.Location = new Point(21, 79);
             label5.Name = "label5";
-            label5.Size = new Size(110, 15);
+            label5.Size = new Size(112, 15);
             label5.TabIndex = 16;
             label5.Text = "Lista de Candidatos";
             // 
             // btnVotar
             // 
             btnVotar.Enabled = false;
-            btnVotar.Location = new Point(465, 246);
+            btnVotar.Location = new Point(540, 253);
             btnVotar.Name = "btnVotar";
             btnVotar.Size = new Size(175, 73);
             btnVotar.TabIndex = 17;
@@ -150,6 +157,7 @@
             // 
             // lstCandidatos
             // 
+            lstCandidatos.BackColor = Color.Silver;
             lstCandidatos.FormattingEnabled = true;
             lstCandidatos.Location = new Point(21, 102);
             lstCandidatos.Name = "lstCandidatos";
@@ -159,6 +167,9 @@
             // 
             // grpResultado
             // 
+            grpResultado.Controls.Add(picP);
+            grpResultado.Controls.Add(picV);
+            grpResultado.Controls.Add(picS);
             grpResultado.Controls.Add(lblMensagemInstr);
             grpResultado.Controls.Add(lblMsgConfirmacao);
             grpResultado.Controls.Add(lblCandSelecionado);
@@ -173,11 +184,44 @@
             grpResultado.TabStop = false;
             grpResultado.Text = "Votação";
             // 
+            // picP
+            // 
+            picP.Image = (Image)resources.GetObject("picP.Image");
+            picP.Location = new Point(363, 102);
+            picP.Name = "picP";
+            picP.Size = new Size(143, 244);
+            picP.SizeMode = PictureBoxSizeMode.Zoom;
+            picP.TabIndex = 25;
+            picP.TabStop = false;
+            picP.Visible = false;
+            // 
+            // picV
+            // 
+            picV.Image = (Image)resources.GetObject("picV.Image");
+            picV.Location = new Point(363, 102);
+            picV.Name = "picV";
+            picV.Size = new Size(143, 244);
+            picV.SizeMode = PictureBoxSizeMode.Zoom;
+            picV.TabIndex = 24;
+            picV.TabStop = false;
+            picV.Visible = false;
+            // 
+            // picS
+            // 
+            picS.Image = (Image)resources.GetObject("picS.Image");
+            picS.Location = new Point(363, 102);
+            picS.Name = "picS";
+            picS.Size = new Size(143, 244);
+            picS.SizeMode = PictureBoxSizeMode.Zoom;
+            picS.TabIndex = 23;
+            picS.TabStop = false;
+            picS.Visible = false;
+            // 
             // lblMensagemInstr
             // 
             lblMensagemInstr.AutoSize = true;
             lblMensagemInstr.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblMensagemInstr.Location = new Point(257, 31);
+            lblMensagemInstr.Location = new Point(261, 19);
             lblMensagemInstr.Name = "lblMensagemInstr";
             lblMensagemInstr.Size = new Size(263, 21);
             lblMensagemInstr.TabIndex = 22;
@@ -188,19 +232,20 @@
             // 
             lblMsgConfirmacao.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblMsgConfirmacao.ForeColor = Color.Green;
-            lblMsgConfirmacao.Location = new Point(387, 172);
+            lblMsgConfirmacao.Location = new Point(530, 130);
             lblMsgConfirmacao.Name = "lblMsgConfirmacao";
-            lblMsgConfirmacao.Size = new Size(309, 60);
+            lblMsgConfirmacao.Size = new Size(198, 93);
             lblMsgConfirmacao.TabIndex = 21;
             lblMsgConfirmacao.Text = "Verifique se o candidato(a) está correto(a) e prima o botão \"Votar\"";
             lblMsgConfirmacao.TextAlign = ContentAlignment.MiddleCenter;
             lblMsgConfirmacao.Visible = false;
+            lblMsgConfirmacao.Click += lblMsgConfirmacao_Click;
             // 
             // lblCandSelecionado
             // 
             lblCandSelecionado.AutoSize = true;
             lblCandSelecionado.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblCandSelecionado.Location = new Point(491, 130);
+            lblCandSelecionado.Location = new Point(363, 79);
             lblCandSelecionado.Name = "lblCandSelecionado";
             lblCandSelecionado.Size = new Size(42, 21);
             lblCandSelecionado.TabIndex = 20;
@@ -210,7 +255,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(474, 102);
+            label6.Location = new Point(363, 59);
             label6.Name = "label6";
             label6.Size = new Size(131, 15);
             label6.TabIndex = 19;
@@ -234,6 +279,9 @@
             grpDadosEleitor.PerformLayout();
             grpResultado.ResumeLayout(false);
             grpResultado.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picP).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picV).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picS).EndInit();
             ResumeLayout(false);
         }
 
@@ -255,5 +303,8 @@
         private Label lblCandSelecionado;
         private Label label6;
         private Label lblMensagemInstr;
+        private PictureBox picS;
+        private PictureBox picP;
+        private PictureBox picV;
     }
 }

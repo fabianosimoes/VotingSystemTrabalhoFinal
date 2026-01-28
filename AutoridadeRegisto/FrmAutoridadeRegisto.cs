@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using VotingSystem;
 using VotingSystem.Voting;
 
@@ -6,7 +7,9 @@ namespace AutoridadeRegisto
     public partial class FrmAutoridadeRegisto : Form
     {
 
-        private string credencial=string.Empty;
+        private string credencial = string.Empty;
+        private string ccNumber = string.Empty;
+        private readonly Dictionary<string, DateTime> _registros = new Dictionary<string, DateTime>();
 
         public FrmAutoridadeRegisto()
         {
@@ -22,14 +25,23 @@ namespace AutoridadeRegisto
         #region Métodos de Interface
         private async void btnObterCredencial_Click(object sender, EventArgs e)
         {
-            Reset();
+           // Reset();
 
-            var ccNumber = txtCartaoCidadao.Text?.Trim();
-            if (string.IsNullOrWhiteSpace(ccNumber))
+
+
+             ccNumber = txtCartaoCidadao.Text.Trim();
+            if (string.IsNullOrWhiteSpace(ccNumber) || !IsNumeric(ccNumber))
             {
-                MessageBox.Show("Introduza o número do Cartão de Cidadão.");
+                MessageBox.Show("Introduza o número do Cartão de Cidadão. Apenas números.", "Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            if (VotanteExiste(ccNumber) == true)
+            {
+                MessageBox.Show("Este número do Cartão de Cidadão já consta como tendo realizado a votação. Por favor,verifique se o número do Cartão de Cidadãofoi digitado corretamente", "Autoridade Registo", MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                return;
+            }
+
 
             try
             {
@@ -53,7 +65,7 @@ namespace AutoridadeRegisto
                 }
 
                 lblElegivelValor.Text = elegivel ? "Sim" : "Não";
-                
+
 
                 if (!elegivel)
                 {
@@ -63,12 +75,15 @@ namespace AutoridadeRegisto
                 {
                     Valido();
                     CaregaCandidatos();
+                    lstCandidatos.Enabled = true;
+                    lstCandidatos.BackColor = Color.White;
+                    txtCartaoCidadao.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
                 lblStatus.Text = "Erro ao obter credencial. Chame um responsávelna mesa de votação e reporte o problema.";
-                MessageBox.Show("Erro ao contactar o serviço: " + ex.Message + "Chame um responsávelna mesa de votação e reporte o problema.");
+                MessageBox.Show("Erro ao contactar o serviço: " + ex.Message + "Chame um responsávelna mesa de votação e reporte o problema.", "Autoridade Registo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -76,10 +91,45 @@ namespace AutoridadeRegisto
         private void lstCandidatos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstCandidatos.SelectedItem == null)
-                return;
+            {
 
-             lblCandSelecionado.Text = lstCandidatos.GetItemText(lstCandidatos.SelectedItem);
-            lblMsgConfirmacao.Visible = true;
+                lblMsgConfirmacao.Visible = false;
+            }
+            else 
+            { 
+                lblMsgConfirmacao.Visible = true;
+
+            lblCandSelecionado.Text = lstCandidatos.GetItemText(lstCandidatos.SelectedItem);
+
+                string valor = lblCandSelecionado.Text;
+                switch (valor)
+                {
+                    case "Candidato A":
+                        picP.Visible = true;
+                        picV.Visible = false;
+                        picS.Visible = false;
+                        break;
+
+                    case "Candidato B":
+                        picP.Visible = false;
+                        picV.Visible = true;
+                        picS.Visible = false;
+                        break;
+
+                    case "Candidato C":
+                        picP.Visible = false;
+                        picV.Visible = false;
+                        picS.Visible = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Outro valor");
+                        break;
+                }
+            }
+
+
+
         }
         #endregion
 
@@ -104,7 +154,7 @@ namespace AutoridadeRegisto
             catch (Exception ex)
             {
                 lblStatus.Text = "Erro ao obter a lista candidatos.Chame um responsávelna mesa de votação e reporte o problema. ";
-                MessageBox.Show("Erro ao obter candidatos: " + ex.Message + "Chame um responsávelna mesa de votação e reporte o problema.");
+                MessageBox.Show("Erro ao obter candidatos: " + ex.Message + "Chame um responsávelna mesa de votação e reporte o problema.","Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,13 +163,13 @@ namespace AutoridadeRegisto
             var cred = credencial?.Trim();
             if (string.IsNullOrWhiteSpace(cred))
             {
-                MessageBox.Show("Credencial de voto não registada. Chame um responsávelna mesa de votação e reporte o problema.");
+                MessageBox.Show("Credencial de voto não registada. Chame um responsávelna mesa de votação e reporte o problema.", "Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (lstCandidatos.SelectedItem is not Candidate cand)
             {
-                MessageBox.Show("Deve selecionar um candidato.");
+                MessageBox.Show("Deve selecionar um candidato.", "Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -135,21 +185,38 @@ namespace AutoridadeRegisto
 
                 var response = await VotacaoApiAR.Client.VoteAsync(request);
 
-                if (response.Success)
-                    lblStatus.Text = "Voto registado com sucesso.";
+                if (response.Success) 
+                {
+                VotanteInserir(ccNumber);
+                lblStatus.Text = "Voto registado com sucesso.";
+                    Reset();
+                }
                 else
-                    lblStatus.Text = "Voto recusado: " + response.Message + "Chame um responsávelna mesa de votação e reporte o problema." ;
+                    lblStatus.Text = "Voto recusado: " + response.Message + "Chame um responsávelna mesa de votação e reporte o problema.";
 
-                MessageBox.Show($"Sucesso: {response.Success}\nMensagem: {response.Message}");
+                MessageBox.Show($"Sucesso: {response.Success}\nMensagem: {response.Message}", "Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 lblStatus.Text = "Erro ao submeter voto." + "Chame um responsávelna mesa de votação e reporte o problema";
-                MessageBox.Show("Erro ao votar: " + ex.Message);
+                MessageBox.Show("Erro ao votar: " + ex.Message, "Autoridade de Registo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        private void VotanteInserir(string ccidadao)
+        {
+            _registros[ccidadao] = DateTime.Now;
+        }
+        private bool VotanteExiste(string ccidadao)
+        {
+            return _registros.ContainsKey(ccidadao);
+        }
 
+        public bool IsNumeric(string valor)
+        {
+            return !string.IsNullOrEmpty(valor) &&
+                   valor.All(char.IsDigit);
+        }
 
         private void Valido()
         {
@@ -183,8 +250,22 @@ namespace AutoridadeRegisto
             credencial = string.Empty;
             btnObterCredencial.Enabled = true;
             btnVotar.Enabled = false;
+            picP.Visible = false;
+            picV.Visible = false;
+            picS.Visible = false;
+            lstCandidatos.DataSource = null;
+            lstCandidatos.Enabled = false;
+            lstCandidatos.BackColor = Color.Silver;
+            txtCartaoCidadao.Enabled = true;
+            txtCartaoCidadao.Text = string.Empty;
+
         }
-#endregion
+
+        private void lblMsgConfirmacao_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
 
         //#####################################################################################################################
     }
