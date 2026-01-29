@@ -24,7 +24,8 @@ namespace AutoridadeRegisto
             };
 
             var channel = GrpcChannel.ForAddress(
-                "https://localhost:9093",
+             // "https://localhost:9093", //
+              "https://ken01.utad.pt:9091", //
                 new GrpcChannelOptions { HttpHandler = handler });
 
             _client = new VoterRegistrationService.VoterRegistrationServiceClient(channel);

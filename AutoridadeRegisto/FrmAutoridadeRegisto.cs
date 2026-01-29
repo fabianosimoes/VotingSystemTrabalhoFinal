@@ -58,7 +58,6 @@ namespace AutoridadeRegisto
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
-
                     return;
                 }
 
