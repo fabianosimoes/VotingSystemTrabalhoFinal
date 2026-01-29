@@ -11,6 +11,9 @@ O objetivo do trabalho é estudar e aplicar conceitos de **integração de siste
 
 A solução implementa uma aplicação cliente que consome **serviços gRPC mock ou disponibilizados em ken01.utad.pt:9091** fornecidos para efeitos académicos.
 
+## IMPORTANTE
+A solução deve iniciar todos os projectos da solução. A solução foi deixada configurada (.slnx) para executar todas, mas caso haja alguma questão quanto à isto, basta clicar com o botão direito no projecto AutoridadeVotacao e selecionar "Configurar Projetos de Inicialização". Após, do lado direito, colocar todos os projetos com a ação "Iniciar", e premir o botão "Ok".
+
 ---
 
 ## Arquitetura do Sistema
@@ -79,6 +82,9 @@ Os serviços são disponibilizados externamente (mockups) e descritos nos fichei
 
 ## Como Executar o Projeto
 
+A solução deve iniciar todos os projectos da solução. A solução foi deixada configurada (.slnx) para executar todas, mas caso haja alguma questão quanto à isto, basta clicar com o botão direito no projecto AutoridadeVotacao e selecionar "Configurar Projetos de Inicialização". Após, do lado direito, colocar todos os projetos com a ação "Iniciar", e premir o botão "Ok".
+
+
 ### Pré-requisitos
 - Windows
 - Visual Studio 2022
@@ -100,6 +106,48 @@ no Visual Studio 2022.
 - consultar candidatos,
 - submeter um voto,
 - consultar resultados.
+
+---
+#Funcionalidade Experimental – Prevenção de Voto Duplicado (Mock Local)
+
+Para efeitos de demonstração e experimentação, o sistema inclui uma funcionalidade experimental de prevenção de voto duplicado, implementada exclusivamente no mock local do serviço de registo de eleitores.
+
+Esta funcionalidade não faz parte do endpoint remoto oficial disponibilizado para a realização do trabalho, tendo sido criada apenas para ilustrar como poderia ser tratado o cenário em que um mesmo eleitor tenta votar mais do que uma vez.
+
+a) Descrição da funcionalidade
+
+A lógica encontra-se implementada no método IssueVotingCredential do serviço de registo e baseia-se num mecanismo simples de controlo local:
+
+a.1.É mantida uma estrutura de dados em memória que associa o número do Cartão de Cidadão à data/hora de emissão da credencial de voto.
+a.2.Sempre que um pedido é efetuado com um número de Cartão de Cidadão já registado, a emissão de uma nova credencial é recusada.
+a.3.Não é armazenada qualquer informação relativa à opção de voto, garantindo-se o anonimato do processo.
+a.4.Esta abordagem permite impedir a duplicação de voto, reforçando o controlo de elegibilidade do votante, sem introduzir mecanismos de auditoria ou persistência permanente.
+
+b) Como ativar o Mock Local para Testar Voto Duplicado
+
+A funcionalidade de prevenção de voto duplicado está disponível apenas no mock local do serviço de registo. Para a experimentar, é necessário trocar temporariamente o endpoint remoto pelo endpoint local no código cliente.
+
+Vá em:
+Projeto: AutoridadeRegisto
+Classe: VotacaoApiAR
+Ficheiro: VotacaoApiAR.cs
+Método afetado: construtor estático onde é criado o GrpcChannel
+
+Passos para ativar o mock local
+
+b.1.Abrir o ficheiro: AutoridadeRegisto/VotacaoApiAR.cs
+
+
+b.2.Comentar o endpoint remoto e descomentar o endpoint local, ficando assim:
+
+var channel = GrpcChannel.ForAddress(
+    // "https://ken01.utad.pt:9091",   // Endpoint remoto (oficial)
+    "https://localhost:9093",         // Mock local (voto duplicado)
+    new GrpcChannelOptions { HttpHandler = handler });
+
+
+b.3.Guardar o ficheiro e executar novamente a aplicação.
+
 
 ---
 
