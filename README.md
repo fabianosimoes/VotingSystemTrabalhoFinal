@@ -108,7 +108,7 @@ no Visual Studio 2022.
 - consultar resultados.
 
 ---
-#Funcionalidade Experimental – Prevenção de Voto Duplicado (Mock Local)
+## Funcionalidade Experimental – Prevenção de Voto Duplicado (Mock Local)
 
 Para efeitos de demonstração e experimentação, o sistema inclui uma funcionalidade experimental de prevenção de voto duplicado, implementada exclusivamente no mock local do serviço de registo de eleitores.
 
