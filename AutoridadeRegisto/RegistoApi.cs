@@ -24,7 +24,7 @@ namespace AutoridadeRegisto
             };
 
             var channel = GrpcChannel.ForAddress(
-             // "https://localhost:9093", //
+             // "https://localhost:9093", // ESTE MOCK CONTEM A FEATURE PARA IMPEDIR A DUPLICAÇÃO DOS VOTOS. COMENTE O ENDPOINT ABAIXO E DESCOMENTE ESTE PARA EXPERIMENTAR
               "https://ken01.utad.pt:9091", //
                 new GrpcChannelOptions { HttpHandler = handler });
 
