@@ -118,10 +118,13 @@ a) Descrição da funcionalidade
 
 A lógica encontra-se implementada no método IssueVotingCredential do serviço de registo e baseia-se num mecanismo simples de controlo local:
 
-a.1.É mantida uma estrutura de dados em memória que associa o número do Cartão de Cidadão à data/hora de emissão da credencial de voto.
-a.2.Sempre que um pedido é efetuado com um número de Cartão de Cidadão já registado, a emissão de uma nova credencial é recusada.
-a.3.Não é armazenada qualquer informação relativa à opção de voto, garantindo-se o anonimato do processo.
-a.4.Esta abordagem permite impedir a duplicação de voto, reforçando o controlo de elegibilidade do votante, sem introduzir mecanismos de auditoria ou persistência permanente.
+**a.1.É mantida uma estrutura de dados em memória que associa o número do Cartão de Cidadão à data/hora de emissão da credencial de voto.
+
+**a.2.Sempre que um pedido é efetuado com um número de Cartão de Cidadão já registado, a emissão de uma nova credencial é recusada.
+
+**a.3.Não é armazenada qualquer informação relativa à opção de voto, garantindo-se o anonimato do processo.
+
+**a.4.Esta abordagem permite impedir a duplicação de voto, reforçando o controlo de elegibilidade do votante, sem introduzir mecanismos de auditoria ou persistência permanente.
 
 b) Como ativar o Mock Local para Testar Voto Duplicado
 
@@ -135,10 +138,10 @@ Método afetado: construtor estático onde é criado o GrpcChannel
 
 Passos para ativar o mock local
 
-b.1.Abrir o ficheiro: AutoridadeRegisto/VotacaoApiAR.cs
+**b.1.Abrir o ficheiro: AutoridadeRegisto/VotacaoApiAR.cs
 
 
-b.2.Comentar o endpoint remoto e descomentar o endpoint local, ficando assim:
+**b.2.Comentar o endpoint remoto e descomentar o endpoint local, ficando assim:
 
 var channel = GrpcChannel.ForAddress(
     // "https://ken01.utad.pt:9091",   // Endpoint remoto (oficial)
@@ -146,7 +149,7 @@ var channel = GrpcChannel.ForAddress(
     new GrpcChannelOptions { HttpHandler = handler });
 
 
-b.3.Guardar o ficheiro e executar novamente a aplicação.
+**b.3.Guardar o ficheiro e executar novamente a aplicação.
 
 
 ---
